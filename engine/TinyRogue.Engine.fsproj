@@ -6,8 +6,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="Types.fs" />
         <Compile Include="Actor.fs" />
         <Compile Include="Map.fs" />
+        <Compile Include="ProcGen\Random.fs" />
+        <Compile Include="ProcGen\BinarySpacePartition.fs" />
+        <Compile Include="ProcGen\DungeonGeneration.fs" />
         <Compile Include="Engine.fs" />
         <Compile Include="Actions.fs" />
         <Compile Include="Core.fs" />

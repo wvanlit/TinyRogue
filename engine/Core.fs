@@ -2,7 +2,7 @@ module TinyRogue.Engine.Core
 
 open TinyRogue.Engine.Actions
 open TinyRogue.Engine.Actor
-open TinyRogue.Engine.Engine
+open TinyRogue.Engine.Types
 
 let UpdateEngine (engine: TinyRogueEngine) = { engine with Turn = engine.Turn + 1u }
 

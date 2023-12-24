@@ -2,7 +2,6 @@ using System.Linq;
 using Godot;
 using TinyRogue.Engine;
 using static TinyRogue.Engine.Actions;
-using static TinyRogue.Engine.Actor;
 using static TinyRogue.Engine.Engine;
 
 namespace TinyRogue.Godot;
@@ -10,7 +9,7 @@ namespace TinyRogue.Godot;
 [GlobalClass]
 public partial class RoguelikeEngine : Node
 {
-	private TinyRogueEngine _engine = CreateEngine();
+	private Types.TinyRogueEngine _engine = CreateEngine();
 
 	[Export] public DungeonMap DungeonMap;
 	[Export] public Node2D Player;
@@ -22,7 +21,7 @@ public partial class RoguelikeEngine : Node
 	{
 		DungeonMap.Setup(_engine.Dungeon);
 
-		var playerActor = _engine.Actors.First(a => a.role.Equals(Role.Player));
+		var playerActor = _engine.Actors.First(a => a.role.Equals(Types.Role.Player));
 		Player.Position = new Vector2(playerActor.position.x, playerActor.position.y) * 48;
 	}
 
@@ -40,10 +39,9 @@ public partial class RoguelikeEngine : Node
 
 	public void PlayerAction(Action playerAction)
 	{
-		Print($"Executing {playerAction}");
 		_engine = Core.ExecutePlayerAction(_engine, playerAction);
 
-		var playerActor = _engine.Actors.First(a => a.role.Equals(Role.Player));
+		var playerActor = _engine.Actors.First(a => a.role.Equals(Types.Role.Player));
 		Player.Position = new Vector2(playerActor.position.x, playerActor.position.y) * 48;
 	}
 

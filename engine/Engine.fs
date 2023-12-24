@@ -1,17 +1,14 @@
 module TinyRogue.Engine.Engine
 
+open TinyRogue.Engine.Types
 open TinyRogue.Engine.Actor
-open TinyRogue.Engine.Map
+open TinyRogue.Engine.ProcGen.DungeonGeneration
 
-type TinyRogueEngine =
-    { Turn: uint
-      Actors: Actor list
-      Dungeon: Dungeon }
 
 let CreateEngine () =
     { Turn = 0u
-      Actors = [ createPlayer 3 5 ]
-      Dungeon = createSimpleDungeon 16 16 }
+      Actors = [ createPlayer 16 16 ]
+      Dungeon = createSimpleDungeon 64u 42u }
 
 let replaceActorWith engine actor =
     { engine with

@@ -1,12 +1,6 @@
 module TinyRogue.Engine.Actor
 
-type Position = { x: int; y: int }
-
-type Role =
-    | Player
-    | NPC
-
-type Actor = { id: uint; role: Role; position: Position }
+open TinyRogue.Engine.Types
 
 
 let pos x y = { x = x; y = y }

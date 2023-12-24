@@ -1,8 +1,8 @@
 module TinyRogue.Engine.Actions
 
-open TinyRogue.Engine.Actor
 open TinyRogue.Engine.Engine
 open TinyRogue.Engine.Map
+open TinyRogue.Engine.Types
 
 type Action =
     | Move of x: int * y: int

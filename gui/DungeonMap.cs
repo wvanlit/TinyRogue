@@ -7,7 +7,7 @@ public partial class DungeonMap : Node2D
 {
     [Export] public TileMap TileMap;
 
-    public void Setup(Map.Dungeon dungeon)
+    public void Setup(Types.Dungeon dungeon)
     {
         for (int y = 0; y < dungeon.Walls.GetLength(0); y++)
         {

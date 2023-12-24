@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://0iaeu8j6s6fp"]
+
+[ext_resource type="Texture2D" uid="uid://bbvxgsw1l5e84" path="res://assets/monochrome-transparent_packed.png" id="1_v4g55"]
+
+[node name="Player" type="Node2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+self_modulate = Color(0.780652, 0.482155, 0.344884, 1)
+position = Vector2(24, 24)
+scale = Vector2(3, 3)
+texture = ExtResource("1_v4g55")
+hframes = 49
+vframes = 22
+frame = 24
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(24, 24)
+scale = Vector2(3, 3)

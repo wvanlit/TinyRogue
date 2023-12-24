@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://10lrshaa81u5"]
+
+[ext_resource type="Script" path="res://DungeonMap.cs" id="1_pp6d7"]
+[ext_resource type="TileSet" uid="uid://ccge3snv7m2ve" path="res://assets/dungeon_tileset.tres" id="1_sul14"]
+
+[node name="DungeonMap" type="Node2D" node_paths=PackedStringArray("TileMap")]
+script = ExtResource("1_pp6d7")
+TileMap = NodePath("TileMap")
+
+[node name="TileMap" type="TileMap" parent="."]
+scale = Vector2(3, 3)
+tile_set = ExtResource("1_sul14")
+format = 2
+layer_0/name = "Walls"
+layer_0/modulate = Color(0.3019, 0.270634, 0.223239, 1)

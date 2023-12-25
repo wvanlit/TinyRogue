@@ -1,91 +1,71 @@
 module TinyRogue.Engine.ProcGen.BinarySpacePartition
 
-open System
 open TinyRogue.Engine.ProcGen.Random
-
-type BspRoom =
-    { x: uint
-      y: uint
-      width: uint
-      height: uint }
+open TinyRogue.Engine.ProcGen.Room
 
 type BspDirection =
     | Horizontal
     | Vertical
     | None
 
-let MIN_ROOM_SIZE = 12
-let MIN_SPLIT_SIZE = uint (MIN_ROOM_SIZE * 2)
+type BinarySpacePartition(minRoomSize: uint, width: uint, height: uint) =
+    let BSP_BORDER = 4u
+    let MIN_BSP_SIZE = minRoomSize + BSP_BORDER
+    let MIN_SPLIT_SIZE = MIN_BSP_SIZE * 2u
+    let RANDOM_STOP_CHANCE = 15
+    let RANDOM_STOP_AREA = width * height
 
-let area room = room.width * room.height
+    let findSplitDirection (room: RectangularRoom) =
+        match room.Height <= MIN_SPLIT_SIZE, room.Width <= MIN_SPLIT_SIZE with
+        | _ when chance RANDOM_STOP_CHANCE && room.Area <= RANDOM_STOP_AREA -> None
+        | true, true -> None
+        | true, false -> Vertical
+        | false, true -> Horizontal
+        | false, false -> if chance 50 then Vertical else Horizontal
 
-let findSplitDirection (room: BspRoom) =
-    if room.height <= MIN_SPLIT_SIZE && room.width <= MIN_SPLIT_SIZE then
-        None
-    elif chance 25 && area room <= 700u then
-        None
-    elif room.height <= MIN_SPLIT_SIZE then
-        Vertical
-    elif room.width <= MIN_SPLIT_SIZE then
-        Horizontal
-    elif room.height > MIN_SPLIT_SIZE && room.width > MIN_SPLIT_SIZE then
-        if chance 50 then Vertical else Horizontal
-    else
-        failwith "Invalid state for Split Direction"
+    let rec split room =
+        match findSplitDirection room with
+        | None -> room, room // End Condition
+        | Horizontal ->
+            let maxRoomSize = room.Height - MIN_BSP_SIZE
+            let splitPoint = randomUnsigned MIN_BSP_SIZE maxRoomSize
 
-let split (room: BspRoom) : BspRoom * BspRoom =
-    let dir = findSplitDirection room
-    printfn $"Splitting {room.width} {room.height}: {dir}"
+            let roomA = RectangularRoom(room.X, room.Y, room.Width, splitPoint + 1u)
 
-    if dir = None then
-        room, room
-    else
-        let splitPoint =
-            uint
-            <| Random.Shared.Next(
-                MIN_ROOM_SIZE,
-                ((if dir = Horizontal then room.height else room.width) |> int) - MIN_ROOM_SIZE
-            )
+            let roomB =
+                RectangularRoom(room.X, room.Y + uint splitPoint, room.Width, room.Height - splitPoint)
 
-        let a: BspRoom =
-            { x = room.x
-              y = room.y
-              width = if dir = Horizontal then room.width else splitPoint + 1u
-              height = if dir = Vertical then room.height else splitPoint + 1u }
+            roomA, roomB
+        | Vertical ->
+            let maxRoomSize = room.Width - MIN_BSP_SIZE
+            let splitPoint = randomUnsigned MIN_BSP_SIZE maxRoomSize
 
-        let b: BspRoom =
-            { x =
-                if dir = Horizontal then
-                    room.x
-                else
-                    room.x + uint splitPoint
-              y = if dir = Vertical then room.y else room.y + uint splitPoint
-              width =
-                if dir = Horizontal then
-                    room.width
-                else
-                    room.width - splitPoint
-              height =
-                if dir = Vertical then
-                    room.height
-                else
-                    room.height - splitPoint }
+            let roomA = RectangularRoom(room.X, room.Y, splitPoint + 1u, room.Height)
 
-        a, b
+            let roomB =
+                RectangularRoom(room.X + uint splitPoint, room.Y, room.Width - splitPoint, room.Height)
 
-let rec splitUntilDone (room: BspRoom) : BspRoom list =
-    let a, b = split room
+            roomA, roomB
 
-    if a = b then
-        [ room ]
-    else
-        List.concat [ splitUntilDone a; splitUntilDone b ]
+    let rec splitUntilDone room =
+        let a, b = split room
 
-let generateBsp (width: uint) (height: uint) : BspRoom list =
-    let full =
-        { x = 0u
-          y = 0u
-          width = width
-          height = height }
+        if a = b then
+            [ room ]
+        else
+            List.concat [ splitUntilDone a; splitUntilDone b ]
+            
+    let generateInnerRoom (room: RectangularRoom) =
+        let randomWidth = max (randomUnsigned minRoomSize room.Width - BSP_BORDER) minRoomSize
+        let randomHeight = max (randomUnsigned minRoomSize room.Height - BSP_BORDER) minRoomSize
+        
+        RectangularRoom(room.X, room.Y, randomWidth, randomHeight)
+        
 
-    splitUntilDone full
+    member this.Generate() =
+        let baseRooms = splitUntilDone (RectangularRoom(0u, 0u, width, height))
+        
+        if baseRooms.Length >= 3 then
+            List.map generateInnerRoom baseRooms
+        else
+            this.Generate()

@@ -1,15 +1,30 @@
-[gd_scene load_steps=3 format=3 uid="uid://10lrshaa81u5"]
+[gd_scene load_steps=4 format=3 uid="uid://10lrshaa81u5"]
 
 [ext_resource type="Script" path="res://DungeonMap.cs" id="1_pp6d7"]
 [ext_resource type="TileSet" uid="uid://ccge3snv7m2ve" path="res://assets/dungeon_tileset.tres" id="1_sul14"]
+[ext_resource type="Texture2D" uid="uid://cw7vihwl4chvr" path="res://assets/palette.png" id="3_cuhbt"]
 
 [node name="DungeonMap" type="Node2D" node_paths=PackedStringArray("TileMap")]
 script = ExtResource("1_pp6d7")
 TileMap = NodePath("TileMap")
+WallTiles = Array[Vector2i]([Vector2i(10, 17), Vector2i(10, 17), Vector2i(10, 17), Vector2i(10, 17), Vector2i(10, 17), Vector2i(7, 15), Vector2i(6, 13), Vector2i(0, 13)])
+DecorationTiles = Array[Vector2i]([Vector2i(19, 1), Vector2i(7, 0), Vector2i(18, 3), Vector2i(19, 3), Vector2i(18, 4), Vector2i(19, 4)])
+DecorationPercentage = 3
 
 [node name="TileMap" type="TileMap" parent="."]
 scale = Vector2(3, 3)
 tile_set = ExtResource("1_sul14")
 format = 2
 layer_0/name = "Walls"
-layer_0/modulate = Color(0.3019, 0.270634, 0.223239, 1)
+layer_0/modulate = Color(0.301961, 0.270588, 0.223529, 1)
+layer_1/name = "Decoration"
+layer_1/modulate = Color(0.4, 0.384314, 0.364706, 1)
+layer_1/tile_data = PackedInt32Array()
+layer_2/name = "Doors"
+layer_2/modulate = Color(0.501961, 0.333333, 0.254902, 1)
+layer_2/tile_data = PackedInt32Array()
+
+[node name="Palette" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(600, 72)
+texture = ExtResource("3_cuhbt")

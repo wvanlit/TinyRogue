@@ -2,15 +2,39 @@ module TinyRogue.Engine.Map
 
 open TinyRogue.Engine.Types
 
-let rect (grid: BitGrid) width height x y =
+let inverseRect (grid: BitGrid) width height x y =
     for rx in x .. (x + width - 1) do
-        grid[y, rx] <- true
-        grid[y + height - 1, rx] <- true
+        grid[y, rx] <- false
+        grid[y + height - 1, rx] <- false
 
     for ry in y .. (y + height - 1) do
-        grid[ry, x] <- true
-        grid[ry, x + width - 1] <- true
+        grid[ry, x] <- false
+        grid[ry, x + width - 1] <- false
 
-let canMoveTo (dungeon: Dungeon) (x: int) (y: int) =
-    true // Ghost mode
-    //if dungeon.Walls[y, x] then false else true
+let rect (grid: BitGrid) width height x y =
+    for rx in x .. (x + width - 1) do
+        for ry in y .. (y + height - 1) do
+            grid[ry, rx] <- false
+
+let inBounds (grid: BitGrid) (pos: Position) =
+    not
+    <| (pos.x < 0 || pos.y < 0 || pos.x > grid.GetLength(1) || pos.y > grid.GetLength(0))  
+
+let raycast (grid: BitGrid) (pos: Position) (step: Position) =
+    let mutable cpos = pos
+    let mutable oob = false
+
+    while (not oob) && grid[cpos.y, cpos.x] = false do
+        let next =
+            { x = cpos.x + step.x
+              y = cpos.y + step.y }
+
+        if not (inBounds grid next) then
+            oob <- true
+        else
+            cpos <- next
+
+    cpos
+
+let canMoveTo (dungeon: Dungeon) (x: int) (y: int) = true // Ghost mode
+//if dungeon.Walls[y, x] then false else true

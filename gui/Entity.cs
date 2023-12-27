@@ -25,10 +25,6 @@ public partial class Entity : Node2D
         const double duration = 0.2;
         const double halfDuration = duration / 2;
 
-        const float spriteBaseValue = 24;
-        var baseSpriteLocation = new Vector2(spriteBaseValue, spriteBaseValue);
-        var arcSpriteLocation = new Vector2(spriteBaseValue, spriteBaseValue - 8);
-
         // Movement
         CreateTween()
             .TweenProperty(
@@ -39,7 +35,33 @@ public partial class Entity : Node2D
             .FromCurrent()
             .SetEase(Tween.EaseType.Out);
 
+        // Tilt
+        const float tiltFactor = 0.15f;
+        var tilt = tiltFactor * Math.Clamp(destination.X - TilePosition.X, -1, 1);
+
+        CreateTween()
+            .TweenProperty(
+                _sprite,
+                new NodePath("rotation"),
+                tilt,
+                0.01)
+            .From(0)
+            .SetEase(Tween.EaseType.In);
+
+        CreateTween()
+            .TweenProperty(
+                _sprite,
+                new NodePath("rotation"),
+                0,
+                duration)
+            .From(tilt)
+            .SetEase(Tween.EaseType.In);
+
         // Hop
+        const float spriteBaseValue = 24;
+        var baseSpriteLocation = new Vector2(spriteBaseValue, spriteBaseValue);
+        var arcSpriteLocation = new Vector2(spriteBaseValue, spriteBaseValue - 8);
+
         CreateTween()
             .TweenProperty(
                 _sprite,

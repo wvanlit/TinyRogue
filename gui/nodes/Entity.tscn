@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://q5sj8b7ysenb"]
+
+[ext_resource type="Script" path="res://Entity.cs" id="1_mjnl7"]
+[ext_resource type="Texture2D" uid="uid://bbvxgsw1l5e84" path="res://assets/monochrome-transparent_packed.png" id="2_vdxb2"]
+
+[node name="Entity" type="Node2D"]
+script = ExtResource("1_mjnl7")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+self_modulate = Color(0.466529, 0.45481, 0.231067, 1)
+position = Vector2(24, 24)
+scale = Vector2(3, 3)
+texture = ExtResource("2_vdxb2")
+hframes = 49
+vframes = 22
+frame = 27

@@ -13,7 +13,7 @@ type RectangularRoom(x: uint, y: uint, width: uint, height: uint) =
 
     override this.Center = (x + (this.Width / 2u) + 1u, y + (this.Height / 2u) + 1u)
 
-    member this.RandomPointInRoom ()=
+    override this.RandomPointInRoom ()=
         let rx = randomUnsigned 1u (this.Width - 1u)
         let ry = randomUnsigned 1u (this.Height - 1u)
         pos (int (x + rx)) (int (y + ry))

@@ -23,6 +23,8 @@ type Room(x: uint, y: uint) =
 
     abstract member Area: uint
     abstract member Center: uint * uint
+    
+    abstract member RandomPointInRoom: unit -> Position
 
 type Dungeon =
     { Walls: BitGrid

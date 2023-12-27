@@ -33,7 +33,7 @@ public partial class Entity : Node2D
                 new Vector2(destination.X, destination.Y) * 48,
                 duration)
             .FromCurrent()
-            .SetEase(Tween.EaseType.Out);
+            .SetEase(Tween.EaseType.InOut);
 
         // Tilt
         const float tiltFactor = 0.15f;

@@ -1,4 +1,3 @@
-using System.Linq;
 using Godot;
 using TinyRogue.Engine;
 using static TinyRogue.Engine.Actions;
@@ -9,21 +8,27 @@ namespace TinyRogue.Godot;
 [GlobalClass]
 public partial class RoguelikeEngine : Node
 {
-    private Types.TinyRogueEngine _engine = CreateEngine();
+    private Types.TinyRogueEngine _engine;
 
     [Export] public DungeonMap DungeonMap;
-    [Export] public Entity Player;
+    [Export] public PuppetMaster PuppetMaster;
+    private uint _playerId;
 
     [Signal]
     public delegate void UpdateEventHandler();
 
     public override void _Ready()
     {
+        _engine = CreateEngine();
         DungeonMap.Setup(_engine.Dungeon);
 
-        var playerActor = _engine.Actors.First(a => a.role.Equals(Types.Role.Player));
+        PuppetMaster.Setup();
+        foreach (var actor in _engine.Actors)
+        {
+            if (actor.role.IsPlayer) _playerId = actor.id;
 
-        Player.MoveImmediate(new Vector2I(playerActor.position.x, playerActor.position.y));
+            PuppetMaster.SpawnActor(actor);
+        }
     }
 
     public override void _Input(InputEvent @event)
@@ -38,20 +43,18 @@ public partial class RoguelikeEngine : Node
 
     public void PlayerAction(Action playerAction)
     {
-        _engine = Core.ExecutePlayerAction(_engine, playerAction);
+        var tuple = Core.ExecutePlayerAction(_engine, playerAction);
 
-        var playerActor = _engine.Actors.First(a => a.role.Equals(Types.Role.Player));
-        Player.MoveSmooth(new Vector2I(playerActor.position.x, playerActor.position.y));
+        _engine = tuple.Item1;
+        foreach (var action in tuple.Item2)
+        {
+            PuppetMaster.VisualiseAction(action);
+        }
     }
 
     public void MovePlayerUp() => PlayerAction(Action.NewMove(0, -1));
     public void MovePlayerDown() => PlayerAction(Action.NewMove(0, 1));
     public void MovePlayerLeft() => PlayerAction(Action.NewMove(-1, 0));
     public void MovePlayerRight() => PlayerAction(Action.NewMove(1, 0));
-
-    public void ResetEngine()
-    {
-        _engine = CreateEngine();
-        _Ready();
-    }
+    public void ResetEngine() => _Ready();
 }

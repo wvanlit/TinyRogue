@@ -1,18 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://dint64da5f1g8"]
+[gd_scene load_steps=7 format=3 uid="uid://dint64da5f1g8"]
 
 [ext_resource type="Script" path="res://RoguelikeEngine.cs" id="1_o5dxt"]
+[ext_resource type="Script" path="res://PuppetMaster.cs" id="2_cl5n3"]
 [ext_resource type="PackedScene" uid="uid://10lrshaa81u5" path="res://nodes/DungeonMap.tscn" id="2_eq1fd"]
+[ext_resource type="PackedScene" uid="uid://q5sj8b7ysenb" path="res://nodes/Entity.tscn" id="3_b4upp"]
 [ext_resource type="Theme" uid="uid://coits3jkhh8mc" path="res://assets/ui/ui_theme.tres" id="3_t3l4h"]
 [ext_resource type="PackedScene" uid="uid://0iaeu8j6s6fp" path="res://nodes/Player.tscn" id="4_xkx0v"]
 
-[node name="RoguelikeEngine" type="Node" node_paths=PackedStringArray("DungeonMap", "Player")]
+[node name="RoguelikeEngine" type="Node" node_paths=PackedStringArray("DungeonMap", "PuppetMaster")]
 script = ExtResource("1_o5dxt")
 DungeonMap = NodePath("DungeonMap")
-Player = NodePath("Player")
+PuppetMaster = NodePath("PuppetMaster")
 
 [node name="DungeonMap" parent="." instance=ExtResource("2_eq1fd")]
 
-[node name="Player" parent="." instance=ExtResource("4_xkx0v")]
+[node name="PuppetMaster" type="Node2D" parent="."]
+script = ExtResource("2_cl5n3")
+EntityScene = ExtResource("3_b4upp")
+PlayerScene = ExtResource("4_xkx0v")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

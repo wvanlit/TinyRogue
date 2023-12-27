@@ -36,5 +36,5 @@ let raycast (grid: BitGrid) (pos: Position) (step: Position) =
 
     cpos
 
-let canMoveTo (dungeon: Dungeon) (x: int) (y: int) = true // Ghost mode
-//if dungeon.Walls[y, x] then false else true
+let canMoveTo (dungeon: Dungeon) (x: int) (y: int) = 
+    if dungeon.Walls[y, x] then false else true

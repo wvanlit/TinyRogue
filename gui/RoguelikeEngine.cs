@@ -12,7 +12,7 @@ public partial class RoguelikeEngine : Node
     private Types.TinyRogueEngine _engine = CreateEngine();
 
     [Export] public DungeonMap DungeonMap;
-    [Export] public Node2D Player;
+    [Export] public Entity Player;
 
     [Signal]
     public delegate void UpdateEventHandler();
@@ -22,7 +22,8 @@ public partial class RoguelikeEngine : Node
         DungeonMap.Setup(_engine.Dungeon);
 
         var playerActor = _engine.Actors.First(a => a.role.Equals(Types.Role.Player));
-        Player.Position = new Vector2(playerActor.position.x, playerActor.position.y) * 48;
+
+        Player.MoveImmediate(new Vector2I(playerActor.position.x, playerActor.position.y));
     }
 
     public override void _Input(InputEvent @event)
@@ -40,7 +41,7 @@ public partial class RoguelikeEngine : Node
         _engine = Core.ExecutePlayerAction(_engine, playerAction);
 
         var playerActor = _engine.Actors.First(a => a.role.Equals(Types.Role.Player));
-        Player.Position = new Vector2(playerActor.position.x, playerActor.position.y) * 48;
+        Player.MoveSmooth(new Vector2I(playerActor.position.x, playerActor.position.y));
     }
 
     public void MovePlayerUp() => PlayerAction(Action.NewMove(0, -1));

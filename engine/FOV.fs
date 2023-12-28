@@ -30,24 +30,26 @@ module private ShadowCasting =
             | East -> pos (ox + row) (oy + col)
             | West -> pos (ox - row) (oy + col)
 
-    type Row(depth: int, startSlope: float, endSlope: float) =
-        let roundTiesUp n = (n + 0.5) |> floor |> int
-        let roundTiesDown n = (n + 0.5) |> ceil |> int
+    type Row(_depth: int, _startSlope: float, _endSlope: float) =
+        let roundTiesUp n = (n + 0.51) |> floor |> int
+        let roundTiesDown n = (n - 0.51) |> ceil |> int
 
-        member _.depth = depth
-        member val startSlope = startSlope with get, set
-        member val endSlope = endSlope with get, set
+        member _.depth = _depth
+        member val startSlope = _startSlope with get, set
+        member val endSlope = _endSlope with get, set
 
-        member _.tiles: RelativePosition list =
-            let minCol = (float depth * startSlope) |> roundTiesUp
-            let maxCol = (float depth * endSlope) |> roundTiesDown
-            List.init (maxCol - minCol) (fun c -> (depth, c + minCol))
+        member r.tiles: RelativePosition list =
+            let minCol = (float r.depth * r.startSlope) |> roundTiesUp
+            let maxCol = (float r.depth * r.endSlope) |> roundTiesDown
+            List.init (maxCol + 1 - minCol) (fun c -> (_depth, c + minCol))
 
-        member _.next = Row(depth + 1, startSlope, endSlope)
+        member r.next = Row(r.depth + 1, r.startSlope, r.endSlope)
 
     let slope (tile: int * int) =
         let rowDepth, col = tile
-        (2.0 * float col - 1.0) / (2.0 * float rowDepth)
+        let fCol = float col
+        let fDepth = float rowDepth
+        (2.0 * fCol - 1.0) / (2.0 * fDepth)
 
     let isSymmetric (row: Row) (tile: RelativePosition) =
         let _, col = tile
@@ -68,7 +70,7 @@ let computeFov (origin: Position) (isBlocking: Position -> bool) (markVisible: P
         let isFloor = isWall >> not
 
         let rec scan (row: Row) =
-            let prevTile = None
+            let mutable prevTile = None
 
             for tile in row.tiles do
                 if isWall tile || isSymmetric row tile then
@@ -80,7 +82,12 @@ let computeFov (origin: Position) (isBlocking: Position -> bool) (markVisible: P
                 if prevTile.IsSome && isFloor prevTile.Value && isWall tile then
                     let nextRow = row.next
                     nextRow.endSlope <- slope tile
-                    scan row
+                    scan nextRow
+
+                prevTile <- Some tile
+                
+            if prevTile.IsSome && isFloor prevTile.Value then
+                scan row.next
 
         let firstRow = Row(1, -1.0, 1.0)
         scan firstRow

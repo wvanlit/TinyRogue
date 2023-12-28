@@ -1,3 +1,5 @@
 # Tiny Rogue
 
-![screenshot.png](screenshot.png)
+![Screenshot of the game](screenshot.png)
+
+![Gif of shadowcasting prototype](prototype_shadowcasting.gif)

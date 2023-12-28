@@ -4,8 +4,10 @@ open TinyRogue.Engine.Actions
 open TinyRogue.Engine.Actor
 open TinyRogue.Engine.ProcGen
 open TinyRogue.Engine.Types
+open TinyRogue.Engine.Engine
 
-let UpdateEngine (engine: TinyRogueEngine) = { engine with Turn = engine.Turn + 1u }
+let UpdateEngine (engine: TinyRogueEngine) =
+    { engine with Turn = engine.Turn + 1u } |> updateFieldOfView
 
 let ExecuteNpcActions (engine: TinyRogueEngine) (actor: Actor) = apply engine actor (Move(1, 0))
 

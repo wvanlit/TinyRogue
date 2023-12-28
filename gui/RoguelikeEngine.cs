@@ -54,6 +54,8 @@ public partial class RoguelikeEngine : Node
             PuppetMaster.VisualiseAction(action);
         }
 
+        // TODO - Only update changed tiles instead of all, this isn't very efficient!
+        VisionMap.Setup(_engine.ShadowMap);
         UpdateActorVisibility();
     }
 

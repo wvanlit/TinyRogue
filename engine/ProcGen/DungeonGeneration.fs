@@ -66,5 +66,5 @@ let createSimpleDungeon (width: uint) (height: uint) (border: uint) : Dungeon =
             tryPlace <| posu (room.X + room.Width) dy
 
     { Walls = walls
-      Doors = List.map (fun d -> (d, chance 25)) doors
+      Doors = List.map (fun d -> (d, chance 100)) doors
       Rooms = List.map (fun r -> r :> Room) rooms }

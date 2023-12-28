@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dint64da5f1g8"]
+[gd_scene load_steps=9 format=3 uid="uid://dint64da5f1g8"]
 
 [ext_resource type="Script" path="res://RoguelikeEngine.cs" id="1_o5dxt"]
 [ext_resource type="Script" path="res://PuppetMaster.cs" id="2_cl5n3"]
@@ -6,13 +6,22 @@
 [ext_resource type="PackedScene" uid="uid://q5sj8b7ysenb" path="res://nodes/Entity.tscn" id="3_b4upp"]
 [ext_resource type="Theme" uid="uid://coits3jkhh8mc" path="res://assets/ui/ui_theme.tres" id="3_t3l4h"]
 [ext_resource type="PackedScene" uid="uid://0iaeu8j6s6fp" path="res://nodes/Player.tscn" id="4_xkx0v"]
+[ext_resource type="TileSet" uid="uid://cb5cva742biwl" path="res://assets/vision_tileset.tres" id="6_4lsly"]
+[ext_resource type="Script" path="res://VisionMap.cs" id="7_3h7ue"]
 
-[node name="RoguelikeEngine" type="Node" node_paths=PackedStringArray("DungeonMap", "PuppetMaster")]
+[node name="RoguelikeEngine" type="Node" node_paths=PackedStringArray("DungeonMap", "PuppetMaster", "VisionMap")]
 script = ExtResource("1_o5dxt")
 DungeonMap = NodePath("DungeonMap")
 PuppetMaster = NodePath("PuppetMaster")
+VisionMap = NodePath("VisionMap")
 
 [node name="DungeonMap" parent="." instance=ExtResource("2_eq1fd")]
+
+[node name="VisionMap" type="TileMap" parent="."]
+scale = Vector2(3, 3)
+tile_set = ExtResource("6_4lsly")
+format = 2
+script = ExtResource("7_3h7ue")
 
 [node name="PuppetMaster" type="Node2D" parent="."]
 script = ExtResource("2_cl5n3")
@@ -40,56 +49,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 2
-metadata/_edit_use_anchors_ = true
-
-[node name="Up" type="Button" parent="CanvasLayer/Control/Right Column"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.375
-anchor_top = 0.361111
-anchor_right = 0.625
-anchor_bottom = 0.416667
-grow_horizontal = 2
-grow_vertical = 2
-text = "^"
-metadata/_edit_use_anchors_ = true
-
-[node name="Down" type="Button" parent="CanvasLayer/Control/Right Column"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.375
-anchor_top = 0.472222
-anchor_right = 0.625
-anchor_bottom = 0.527778
-grow_horizontal = 2
-grow_vertical = 2
-text = "v"
-metadata/_edit_use_anchors_ = true
-
-[node name="Left" type="Button" parent="CanvasLayer/Control/Right Column"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.125
-anchor_top = 0.416667
-anchor_right = 0.34375
-anchor_bottom = 0.439429
-offset_right = 6.0
-offset_bottom = 28.3333
-grow_horizontal = 2
-grow_vertical = 2
-text = "<"
-metadata/_edit_use_anchors_ = true
-
-[node name="Right" type="Button" parent="CanvasLayer/Control/Right Column"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.625
-anchor_top = 0.416667
-anchor_right = 0.875
-anchor_bottom = 0.472222
-grow_horizontal = 2
-grow_vertical = 2
-text = ">"
 metadata/_edit_use_anchors_ = true
 
 [node name="Left Column" type="Panel" parent="CanvasLayer/Control"]
@@ -136,8 +95,3 @@ offset_bottom = 336.0
 grow_horizontal = 2
 grow_vertical = 2
 editor_only = false
-
-[connection signal="pressed" from="CanvasLayer/Control/Right Column/Up" to="." method="MovePlayerUp"]
-[connection signal="pressed" from="CanvasLayer/Control/Right Column/Down" to="." method="MovePlayerDown"]
-[connection signal="pressed" from="CanvasLayer/Control/Right Column/Left" to="." method="MovePlayerLeft"]
-[connection signal="pressed" from="CanvasLayer/Control/Right Column/Right" to="." method="MovePlayerRight"]

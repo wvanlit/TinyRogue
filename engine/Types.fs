@@ -26,12 +26,18 @@ type Room(x: uint, y: uint) =
     
     abstract member RandomPointInRoom: unit -> Position
 
+type Visibility = | Visible | Explored | Unexplored
+
+type ShadowMap = Visibility array2d
+
 type Dungeon =
-    { Walls: BitGrid
+    {
+      Walls: BitGrid
       Doors: Door list
-      Rooms: Room list }
+      Rooms: Room list  }
 
 type TinyRogueEngine =
     { Turn: uint
       Actors: Actor list
-      Dungeon: Dungeon }
+      Dungeon: Dungeon
+      ShadowMap: ShadowMap }

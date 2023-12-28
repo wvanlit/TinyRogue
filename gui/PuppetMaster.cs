@@ -57,4 +57,9 @@ public partial class PuppetMaster : Node2D
             _entities[moved.actor].MoveSmooth(new Vector2I(moved.position.x, moved.position.y));
         }
     }
+
+    public void SetActorVisibility(uint id, bool state)
+    {
+        _entities[id].SpriteVisible(state);
+    }
 }

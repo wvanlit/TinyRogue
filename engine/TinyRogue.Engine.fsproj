@@ -9,6 +9,7 @@
         <Compile Include="Types.fs" />
         <Compile Include="Actor.fs" />
         <Compile Include="Map.fs" />
+        <Compile Include="FOV.fs"/>
         <Compile Include="ProcGen\Random.fs" />
         <Compile Include="ProcGen\Room.fs"/>
         <Compile Include="ProcGen\BinarySpacePartition.fs" />

@@ -14,6 +14,11 @@ public partial class Entity : Node2D
         _sprite = GetNode<Sprite2D>("Sprite") ?? throw new ArgumentNullException(nameof(_sprite));
     }
 
+    public void SpriteVisible(bool state)
+    {
+        _sprite.Visible = state;
+    }
+
     public void MoveImmediate(Vector2I destination)
     {
         TilePosition = destination;

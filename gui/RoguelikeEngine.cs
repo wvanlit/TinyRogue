@@ -12,10 +12,9 @@ public partial class RoguelikeEngine : Node
 
     [Export] public DungeonMap DungeonMap;
     [Export] public PuppetMaster PuppetMaster;
-    private uint _playerId;
+    [Export] public VisionMap VisionMap;
 
-    [Signal]
-    public delegate void UpdateEventHandler();
+    private uint _playerId;
 
     public override void _Ready()
     {
@@ -29,6 +28,10 @@ public partial class RoguelikeEngine : Node
 
             PuppetMaster.SpawnActor(actor);
         }
+
+        VisionMap.Setup(_engine.ShadowMap);
+
+        UpdateActorVisibility();
     }
 
     public override void _Input(InputEvent @event)
@@ -49,6 +52,24 @@ public partial class RoguelikeEngine : Node
         foreach (var action in tuple.Item2)
         {
             PuppetMaster.VisualiseAction(action);
+        }
+
+        UpdateActorVisibility();
+    }
+
+    private void UpdateActorVisibility()
+    {
+        foreach (var actor in _engine.Actors)
+        {
+            if (actor.role.IsPlayer)
+            {
+                PuppetMaster.SetActorVisibility(actor.id, true);
+            }
+            else
+            {
+                var (visible, _) = VisionMap.CheckVisibility(new Vector2I(actor.position.x, actor.position.y));
+                PuppetMaster.SetActorVisibility(actor.id, visible);
+            }
         }
     }
 

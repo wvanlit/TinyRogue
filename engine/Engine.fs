@@ -25,7 +25,7 @@ let updateFieldOfView engine =
 
     { engine with ShadowMap = newShadowMap }
 
-let CreateEngine () : TinyRogueEngine =
+let CreateEngine () : GameEngine =
     let dungeon = createSimpleDungeon 48u 32u 6u
 
     let cx, cy = (randomItem dungeon.Rooms).Center

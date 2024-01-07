@@ -15,7 +15,7 @@ type ExecutedAction =
     | Moved of actor: ActorId * position: Position
     | DealtDamage of attacker: ActorId * defender: ActorId * damage: uint
 
-let rec apply (engine: TinyRogueEngine) (actor: Actor) (action: Action) =
+let rec apply (engine: GameEngine) (actor: Actor) (action: Action) =
     match action with
     | Move(x, y) ->
         let newPosition = actor.position.offset(x, y)

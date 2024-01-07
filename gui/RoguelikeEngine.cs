@@ -4,13 +4,14 @@ using TinyRogue.Engine;
 using TinyRogue.Godot.Helpers;
 using static TinyRogue.Engine.Actions;
 using static TinyRogue.Engine.Engine;
+using static TinyRogue.Engine.Types;
 
 namespace TinyRogue.Godot;
 
 [GlobalClass]
 public partial class RoguelikeEngine : Node
 {
-    private Types.TinyRogueEngine _engine;
+    private GameEngine _engine;
 
     [Export] public DungeonMap DungeonMap;
     [Export] public PuppetMaster PuppetMaster;

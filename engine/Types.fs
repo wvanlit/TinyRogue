@@ -47,7 +47,7 @@ type Dungeon =
       Doors: Door list
       Rooms: Room list }
 
-type TinyRogueEngine =
+type GameEngine =
     { Turn: uint
       Actors: Actor list
       Dungeon: Dungeon

@@ -7,9 +7,9 @@ resource_name = "Occlusion"
 texture = ExtResource("1_gb4fa")
 8:5/next_alternative_id = 3
 8:5/0 = 0
-8:5/0/modulate = Color(0.168536, 0.156802, 0.152895, 1)
+8:5/0/modulate = Color(0.14902, 0.137255, 0.133333, 1)
 8:5/1 = 1
-8:5/1/modulate = Color(0.168627, 0.156863, 0.152941, 0.65098)
+8:5/1/modulate = Color(0.14902, 0.137255, 0.133333, 0.65098)
 8:5/2 = 2
 8:5/2/modulate = Color(0.168627, 0.156863, 0.152941, 0)
 

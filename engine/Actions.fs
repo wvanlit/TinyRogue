@@ -18,8 +18,8 @@ type ExecutedAction =
 let rec apply (engine: TinyRogueEngine) (actor: Actor) (action: Action) =
     match action with
     | Move(x, y) ->
-        let newPosition = Position(x + actor.position.x, y + actor.position.y)
-        let canMove = canMoveTo engine.Dungeon newPosition.x newPosition.y
+        let newPosition = actor.position.offset(x, y)
+        let canMove = canMoveTo engine.Dungeon newPosition
 
         let target =
             engine.Actors
@@ -35,7 +35,7 @@ let rec apply (engine: TinyRogueEngine) (actor: Actor) (action: Action) =
             (engine, NoAction)
     | Skip -> (engine, NoAction)
     | Attack(x, y) ->
-        let newPosition = Position(x + actor.position.x, y + actor.position.y)
+        let newPosition = actor.position.offset(x, y)
 
         let target =
             engine.Actors

@@ -7,6 +7,8 @@ type Position =
 
         new(_x: int, _y: int) = { x = _x; y = _y }
         new(_x: uint, _y: uint) = { x = int _x; y = int _y }
+
+        member p.offset(_x: int, _y: int) = Position(p.x + _x, p.y + _y)
     end
 
 type Role =

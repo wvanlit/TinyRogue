@@ -18,14 +18,14 @@ let rect (grid: BitGrid) width height x y =
 
 let inBounds (grid: BitGrid) (pos: Position) =
     not
-    <| (pos.x < 0 || pos.y < 0 || pos.x > grid.GetLength(1) || pos.y > grid.GetLength(0))  
+    <| (pos.x < 0 || pos.y < 0 || pos.x > grid.GetLength(1) || pos.y > grid.GetLength(0))
 
 let raycast (grid: BitGrid) (pos: Position) (step: Position) =
     let mutable cpos = pos
     let mutable oob = false
 
     while (not oob) && grid[cpos.y, cpos.x] = false do
-        let next = Position(cpos.x + step.x, cpos.y + step.y)
+        let next = cpos.offset(step.x, step.y)
 
         if not (inBounds grid next) then
             oob <- true
@@ -34,5 +34,4 @@ let raycast (grid: BitGrid) (pos: Position) (step: Position) =
 
     cpos
 
-let canMoveTo (dungeon: Dungeon) (x: int) (y: int) = 
-    if dungeon.Walls[y, x] then false else true
+let canMoveTo (dungeon: Dungeon) (pos: Position) = not (dungeon.Walls[pos.y, pos.x])

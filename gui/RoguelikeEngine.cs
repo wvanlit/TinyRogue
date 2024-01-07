@@ -1,5 +1,7 @@
+using System.Linq;
 using Godot;
 using TinyRogue.Engine;
+using TinyRogue.Godot.Helpers;
 using static TinyRogue.Engine.Actions;
 using static TinyRogue.Engine.Engine;
 
@@ -15,23 +17,28 @@ public partial class RoguelikeEngine : Node
     [Export] public VisionMap VisionMap;
 
     private uint _playerId;
+    private bool _killedAllEnemies;
 
     public override void _Ready()
     {
         _engine = CreateEngine();
+
         DungeonMap.Setup(_engine.Dungeon);
+        VisionMap.Setup(_engine.ShadowMap);
 
         PuppetMaster.Setup();
+
         foreach (var actor in _engine.Actors)
         {
-            if (actor.role.IsPlayer) _playerId = actor.id;
+            if (actor.role.IsPlayer)
+                _playerId = actor.id;
 
             PuppetMaster.SpawnActor(actor);
         }
 
-        VisionMap.Setup(_engine.ShadowMap);
-
         UpdateActorVisibility();
+
+        _killedAllEnemies = false;
     }
 
     public override void _Input(InputEvent @event)
@@ -49,14 +56,22 @@ public partial class RoguelikeEngine : Node
         var tuple = Core.ExecutePlayerAction(_engine, playerAction);
 
         _engine = tuple.Item1;
-        foreach (var action in tuple.Item2)
+        foreach (var executedAction in tuple.Item2)
         {
-            PuppetMaster.VisualiseAction(action);
+            PuppetMaster.VisualiseAction(executedAction);
         }
+
+        Print("Executed Actions: \n\t", string.Join("\n\t", tuple.Item2.Select(x => x.Stringify())));
 
         // TODO - Only update changed tiles instead of all, this isn't very efficient!
         VisionMap.Setup(_engine.ShadowMap);
         UpdateActorVisibility();
+
+        if (_engine.Actors.Length == 1 && !_killedAllEnemies) // Only the player is left
+        {
+            _killedAllEnemies = true;
+            GetTree().CreateTimer(2.0).Connect("timeout", new(this, nameof(ResetEngine)));
+        }
     }
 
     private void UpdateActorVisibility()
@@ -76,8 +91,12 @@ public partial class RoguelikeEngine : Node
     }
 
     public void MovePlayerUp() => PlayerAction(Action.NewMove(0, -1));
+
     public void MovePlayerDown() => PlayerAction(Action.NewMove(0, 1));
+
     public void MovePlayerLeft() => PlayerAction(Action.NewMove(-1, 0));
+
     public void MovePlayerRight() => PlayerAction(Action.NewMove(1, 0));
+
     public void ResetEngine() => _Ready();
 }

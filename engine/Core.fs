@@ -19,7 +19,7 @@ let ExecutePlayerAction (engine: TinyRogueEngine, action: Action) =
     let engine, npcActions =
         List.fold<Actor, TinyRogueEngine * ExecutedAction list>
             (fun (engine, actions) npc ->
-                let move = [ Move(0, 1); Move(0, -1); Move(1, 0); Move(-1, 0) ] |> Random.randomItem
+                let move = [ Move(0, 1); Move(0, -1); Move(1, 0); Move(-1, 0); Skip; Skip ] |> Random.randomItem
                 let engine, ex = apply engine npc move
                 (engine, actions @ [ ex ]))
             (engine, [])

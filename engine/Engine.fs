@@ -52,3 +52,7 @@ let CreateEngine () : TinyRogueEngine =
 let replaceActorWith engine actor =
     { engine with
         Actors = List.filter (fun a -> a.id <> actor.id) engine.Actors @ [ actor ] }
+
+let removeActor id engine =
+    { engine with
+        Actors = List.filter (fun a -> a.id <> id) engine.Actors }

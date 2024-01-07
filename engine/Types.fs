@@ -8,8 +8,10 @@ type Role =
     | Player
     | NPC
 
+type ActorId = uint
+
 type Actor =
-    { id: uint
+    { id: ActorId
       role: Role
       position: Position }
 

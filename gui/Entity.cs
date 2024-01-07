@@ -8,15 +8,25 @@ public partial class Entity : Node2D
     public Vector2I TilePosition { get; private set; } = Vector2I.Zero;
 
     private Sprite2D _sprite;
+    private AnimationPlayer _animationPlayer;
 
     public override void _Ready()
     {
         _sprite = GetNode<Sprite2D>("Sprite") ?? throw new ArgumentNullException(nameof(_sprite));
+        _animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer") ??
+                           throw new ArgumentNullException(nameof(_animationPlayer));
+
+        _animationPlayer.Play("RESET");
     }
 
     public void SpriteVisible(bool state)
     {
         _sprite.Visible = state;
+    }
+
+    public void Die()
+    {
+        _animationPlayer.Play("die");
     }
 
     public void MoveImmediate(Vector2I destination)

@@ -26,9 +26,9 @@ public partial class PuppetMaster : Node2D
         }
     }
 
-    public void SpawnActor(Types.Actor actor)
+    public void SpawnActor(Entities.Actor actor)
     {
-        if (actor.role.Equals(Role.Player))
+        if (actor.role.Equals(Entities.Role.Player))
         {
             var player = (PlayerScene.Instantiate()) as Entity;
             Debug.Assert(player is not null, "player is null");
@@ -41,7 +41,7 @@ public partial class PuppetMaster : Node2D
             _entities[actor.id] = player;
             _playerId = actor.id;
         }
-        else if (actor.role.Equals(Role.NPC))
+        else if (actor.role.Equals(Entities.Role.NPC))
         {
             var entity = EntityScene.Instantiate() as Entity;
             Debug.Assert(entity is not null);

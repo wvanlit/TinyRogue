@@ -1,10 +1,10 @@
 module TinyRogue.Engine.Core
 
 open TinyRogue.Engine.Actions
-open TinyRogue.Engine.Actor
 open TinyRogue.Engine.ProcGen
 open TinyRogue.Engine.Types
 open TinyRogue.Engine.Engine
+open TinyRogue.Engine.Types.Entities
 
 let UpdateEngine (engine: GameEngine) =
     { engine with Turn = engine.Turn + 1u } |> updateFieldOfView
@@ -12,7 +12,7 @@ let UpdateEngine (engine: GameEngine) =
 let ExecuteNpcActions (engine: GameEngine) (actor: Actor) = apply engine actor (Move(1, 0))
 
 let ExecutePlayerAction (engine: GameEngine, action: Action) =
-    let player = List.find isPlayer engine.Actors
+    let player = List.find Actor.IsPlayer engine.Actors
 
     let engine, executed = apply engine player action
 
@@ -23,6 +23,6 @@ let ExecutePlayerAction (engine: GameEngine, action: Action) =
                 let engine, ex = apply engine npc move
                 (engine, actions @ [ ex ]))
             (engine, [])
-            (engine.Actors |> List.filter (isPlayer >> not))
+            (engine.Actors |> List.filter (Actor.IsPlayer >> not))
 
     UpdateEngine engine, executed :: npcActions

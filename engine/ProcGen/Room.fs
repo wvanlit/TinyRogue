@@ -2,6 +2,7 @@ module TinyRogue.Engine.ProcGen.Room
 
 open TinyRogue.Engine.Types
 open TinyRogue.Engine.ProcGen.Random
+open TinyRogue.Engine.Types.Primitives
 
 type RectangularRoom(x: uint, y: uint, width: uint, height: uint) =
     inherit Room(x, y)

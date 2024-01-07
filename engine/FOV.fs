@@ -1,6 +1,6 @@
 module TinyRogue.Engine.FOV
 
-open TinyRogue.Engine.Types
+open TinyRogue.Engine.Types.Primitives
 
 // Calculate FOV using recursive shadow casting
 // Based on: https://www.albertford.com/shadowcasting

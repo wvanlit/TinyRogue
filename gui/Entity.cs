@@ -15,8 +15,6 @@ public partial class Entity : Node2D
         _sprite = GetNode<Sprite2D>("Sprite") ?? throw new ArgumentNullException(nameof(_sprite));
         _animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer") ??
                            throw new ArgumentNullException(nameof(_animationPlayer));
-
-        _animationPlayer.Play("RESET");
     }
 
     public void SpriteVisible(bool state)

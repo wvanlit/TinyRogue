@@ -4,6 +4,7 @@ open TinyRogue.Engine.Map
 open TinyRogue.Engine.Types
 open TinyRogue.Engine.ProcGen.Random
 open TinyRogue.Engine.ProcGen.BinarySpacePartition
+open TinyRogue.Engine.Types.Primitives
 
 let carveCorridor (walls: BitGrid) (from: Position) (towards: Position) =
     let fx, tx = (min from.x towards.x, max from.x towards.x)

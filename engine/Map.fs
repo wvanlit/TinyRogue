@@ -1,6 +1,7 @@
 module TinyRogue.Engine.Map
 
 open TinyRogue.Engine.Types
+open TinyRogue.Engine.Types.Primitives
 
 let inverseRect (grid: BitGrid) width height x y =
     for rx in x .. (x + width - 1) do

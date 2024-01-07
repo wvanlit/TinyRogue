@@ -3,6 +3,8 @@ module TinyRogue.Engine.Actions
 open TinyRogue.Engine.Engine
 open TinyRogue.Engine.Map
 open TinyRogue.Engine.Types
+open TinyRogue.Engine.Types.Entities
+open TinyRogue.Engine.Types.Primitives
 open TinyRogue.Engine.Utils
 
 type Action =
@@ -12,8 +14,8 @@ type Action =
 
 type ExecutedAction =
     | NoAction
-    | Moved of actor: ActorId * position: Position
-    | DealtDamage of attacker: ActorId * defender: ActorId * damage: uint
+    | Moved of actor: EntityId * position: Position
+    | DealtDamage of attacker: EntityId * defender: EntityId * damage: uint
 
 let rec apply (engine: GameEngine) (actor: Actor) (action: Action) =
     match action with
@@ -26,7 +28,7 @@ let rec apply (engine: GameEngine) (actor: Actor) (action: Action) =
             |> List.tryFind (fun a -> a.position.x = newPosition.x && a.position.y = newPosition.y)
 
         if canMove && target.IsNone then
-            (replaceActorWith engine { actor with position = newPosition }, Moved(actor.id, newPosition))
+            (replaceActorWith engine (actor.move newPosition), Moved(actor.id, newPosition))
         elif canMove && target.IsSome then
             // Moving to a tile with an actor on it is an attack
             apply engine actor (Attack(x, y))

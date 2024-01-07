@@ -9,7 +9,6 @@
         <Compile Include="Types.fs" />
         <Compile Include="Utils.fs"/>
         <Compile Include="Data.fs"/>
-        <Compile Include="Actor.fs" />
         <Compile Include="Map.fs" />
         <Compile Include="FOV.fs"/>
         <Compile Include="ProcGen\Random.fs" />

@@ -1,10 +1,11 @@
 module TinyRogue.Engine.Engine
 
 open TinyRogue.Engine.Types
-open TinyRogue.Engine.Actor
 open TinyRogue.Engine.ProcGen.DungeonGeneration
 open TinyRogue.Engine.ProcGen.Random
 open TinyRogue.Engine.FOV
+open TinyRogue.Engine.Types.Entities
+open TinyRogue.Engine.Types.Primitives
 
 let calculateFieldOfView dungeon pos =
     let initialShadowMap =
@@ -15,7 +16,7 @@ let calculateFieldOfView dungeon pos =
     initialShadowMap
 
 let updateFieldOfView engine =
-    let pos = (List.find isPlayer engine.Actors).position
+    let pos = (List.find Actor.IsPlayer engine.Actors).position
     let newShadowMap = calculateFieldOfView engine.Dungeon pos
 
     for y in 0 .. newShadowMap.GetLength(0) - 1 do
@@ -29,7 +30,7 @@ let CreateEngine () : GameEngine =
     let dungeon = createSimpleDungeon 48u 32u 6u
 
     let cx, cy = (randomItem dungeon.Rooms).Center
-    let player = createPlayer (Position(cx, cy))
+    let player = Actor.Player(Position(cx, cy))
 
     let enemies =
         dungeon.Rooms
@@ -37,10 +38,7 @@ let CreateEngine () : GameEngine =
         |> List.map (fun (c, r) -> List.init (int c) (fun _ -> r.RandomPointInRoom()))
         |> List.concat
         |> List.indexed
-        |> List.map (fun (idx, pos) ->
-            { id = uint idx + 1u
-              role = NPC
-              position = pos })
+        |> List.map (fun (idx, pos) -> Actor.Npc (uint idx + 1u) pos)
 
     { Turn = 0u
       Actors = [ player ] @ enemies
@@ -49,7 +47,7 @@ let CreateEngine () : GameEngine =
 
 
 
-let replaceActorWith engine actor =
+let replaceActorWith engine (actor: Actor) =
     { engine with
         Actors = List.filter (fun a -> a.id <> actor.id) engine.Actors @ [ actor ] }
 

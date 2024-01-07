@@ -25,10 +25,10 @@ module private ShadowCasting =
             let row, col = tile
 
             match cardinal with
-            | North -> pos (ox + col) (oy - row)
-            | South -> pos (ox + col) (oy + row)
-            | East -> pos (ox + row) (oy + col)
-            | West -> pos (ox - row) (oy + col)
+            | North -> Position((ox + col), (oy - row))
+            | South -> Position((ox + col), (oy + row))
+            | East -> Position((ox + row), (oy + col))
+            | West -> Position((ox - row), (oy + col))
 
     type Row(_depth: int, _startSlope: float, _endSlope: float) =
         let roundTiesUp n = (n + 0.51) |> floor |> int
@@ -85,7 +85,7 @@ let computeFov (origin: Position) (isBlocking: Position -> bool) (markVisible: P
                     scan nextRow
 
                 prevTile <- Some tile
-                
+
             if prevTile.IsSome && isFloor prevTile.Value then
                 scan row.next
 

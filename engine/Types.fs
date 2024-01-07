@@ -1,8 +1,13 @@
 module TinyRogue.Engine.Types
 
-type Position = { x: int; y: int }
-let pos x y = { x = x; y = y }
-let posu (x: uint) (y: uint) = { x = int x; y = int y }
+type Position =
+    struct
+        val x: int
+        val y: int
+
+        new(_x: int, _y: int) = { x = _x; y = _y }
+        new(_x: uint, _y: uint) = { x = int _x; y = int _y }
+    end
 
 type Role =
     | Player
@@ -25,18 +30,20 @@ type Room(x: uint, y: uint) =
 
     abstract member Area: uint
     abstract member Center: uint * uint
-    
+
     abstract member RandomPointInRoom: unit -> Position
 
-type Visibility = | Visible | Explored | Unexplored
+type Visibility =
+    | Visible
+    | Explored
+    | Unexplored
 
 type ShadowMap = Visibility array2d
 
 type Dungeon =
-    {
-      Walls: BitGrid
+    { Walls: BitGrid
       Doors: Door list
-      Rooms: Room list  }
+      Rooms: Room list }
 
 type TinyRogueEngine =
     { Turn: uint

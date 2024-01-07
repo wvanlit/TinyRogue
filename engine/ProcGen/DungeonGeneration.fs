@@ -54,16 +54,16 @@ let createSimpleDungeon (width: uint) (height: uint) (border: uint) : Dungeon =
                 if canPlaceDoorY walls pos then
                     doors <- pos :: doors
 
-            tryPlace <| posu dx (room.Y - 1u)
-            tryPlace <| posu dx (room.Y + room.Height)
+            tryPlace <| Position(dx, (room.Y - 1u))
+            tryPlace <| Position(dx, (room.Y + room.Height))
 
         for dy in room.Y .. room.Y + room.Height do
             let tryPlace pos =
                 if canPlaceDoorX walls pos then
                     doors <- pos :: doors
 
-            tryPlace <| posu (room.X - 1u) dy
-            tryPlace <| posu (room.X + room.Width) dy
+            tryPlace <| Position((room.X - 1u), dy)
+            tryPlace <| Position((room.X + room.Width), dy)
 
     { Walls = walls
       Doors = List.map (fun d -> (d, chance 100)) doors

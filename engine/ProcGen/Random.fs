@@ -17,6 +17,6 @@ let rec randomDirection () =
     let rx = rng.Next(-1, 2)
     let ry = rng.Next(-1, 2)
     // 0,0 is not a valid direction
-    if rx = 0 && ry = 0 then randomDirection () else pos rx ry
+    if rx = 0 && ry = 0 then randomDirection () else Position(rx, ry)
 
 let randomItem<'a> (from: 'a list) = from[rng.Next(0, from.Length)]

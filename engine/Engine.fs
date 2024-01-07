@@ -15,8 +15,8 @@ let calculateFieldOfView dungeon pos =
     initialShadowMap
 
 let updateFieldOfView engine =
-    let newShadowMap =
-        calculateFieldOfView engine.Dungeon (List.find isPlayer engine.Actors).position
+    let pos = (List.find isPlayer engine.Actors).position
+    let newShadowMap = calculateFieldOfView engine.Dungeon pos
 
     for y in 0 .. newShadowMap.GetLength(0) - 1 do
         for x in 0 .. newShadowMap.GetLength(1) - 1 do
@@ -29,7 +29,7 @@ let CreateEngine () : TinyRogueEngine =
     let dungeon = createSimpleDungeon 48u 32u 6u
 
     let cx, cy = (randomItem dungeon.Rooms).Center
-    let player = createPlayer (int cx) (int cy)
+    let player = createPlayer (Position(cx, cy))
 
     let enemies =
         dungeon.Rooms

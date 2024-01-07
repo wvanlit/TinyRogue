@@ -16,7 +16,7 @@ type RectangularRoom(x: uint, y: uint, width: uint, height: uint) =
     override this.RandomPointInRoom ()=
         let rx = randomUnsigned 1u (this.Width - 1u)
         let ry = randomUnsigned 1u (this.Height - 1u)
-        pos (int (x + rx)) (int (y + ry))
+        Position((int (x + rx)), (int (y + ry)))
 
     member this.Offset xOff yOff =
         RectangularRoom(this.X + xOff, this.Y + yOff, width, height)

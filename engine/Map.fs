@@ -25,9 +25,7 @@ let raycast (grid: BitGrid) (pos: Position) (step: Position) =
     let mutable oob = false
 
     while (not oob) && grid[cpos.y, cpos.x] = false do
-        let next =
-            { x = cpos.x + step.x
-              y = cpos.y + step.y }
+        let next = Position(cpos.x + step.x, cpos.y + step.y)
 
         if not (inBounds grid next) then
             oob <- true

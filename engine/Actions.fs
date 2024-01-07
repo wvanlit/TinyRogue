@@ -3,6 +3,7 @@ module TinyRogue.Engine.Actions
 open TinyRogue.Engine.Engine
 open TinyRogue.Engine.Map
 open TinyRogue.Engine.Types
+open TinyRogue.Engine.Utils
 
 type Action =
     | Move of x: int * y: int
@@ -17,12 +18,12 @@ type ExecutedAction =
 let rec apply (engine: TinyRogueEngine) (actor: Actor) (action: Action) =
     match action with
     | Move(x, y) ->
-        let newPosition =
-            { x = x + actor.position.x
-              y = y + actor.position.y }
-
+        let newPosition = Position(x + actor.position.x, y + actor.position.y)
         let canMove = canMoveTo engine.Dungeon newPosition.x newPosition.y
-        let target = engine.Actors |> List.tryFind (fun a -> a.position.x = newPosition.x && a.position.y = newPosition.y)
+
+        let target =
+            engine.Actors
+            |> List.tryFind (fun a -> a.position.x = newPosition.x && a.position.y = newPosition.y)
 
         if canMove && target.IsNone then
             (replaceActorWith engine { actor with position = newPosition }, Moved(actor.id, newPosition))
@@ -34,13 +35,17 @@ let rec apply (engine: TinyRogueEngine) (actor: Actor) (action: Action) =
             (engine, NoAction)
     | Skip -> (engine, NoAction)
     | Attack(x, y) ->
-        let newPosition =
-            { x = x + actor.position.x
-              y = y + actor.position.y }
-        let target = engine.Actors |> List.tryFind (fun a -> a.position.x = newPosition.x && a.position.y = newPosition.y)
+        let newPosition = Position(x + actor.position.x, y + actor.position.y)
+
+        let target =
+            engine.Actors
+            |> List.tryFind (fun a -> a.position.x = newPosition.x && a.position.y = newPosition.y)
 
         match target with
         | None -> (engine, NoAction)
         | Some defender ->
             // TODO: Add proper damage calculation based on actor stats later
-            (engine |> removeActor defender.id, DealtDamage(actor.id, defender.id, 1u))
+            let damageEvent = DealtDamage(actor.id, defender.id, 1u)
+
+            // Cannot remove player from list
+            (engine |> unless (defender.id = 0u) (removeActor defender.id), damageEvent)
